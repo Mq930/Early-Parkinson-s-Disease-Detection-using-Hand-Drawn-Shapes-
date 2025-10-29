@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works - SketchScreen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Steps Timeline */
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            margin: 4rem 0;
+            position: relative;
+            flex-wrap: wrap;
+        }
+
+        .step {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step-icon {
+            font-size: 2.5rem;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+
+        .step h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .step p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Privacy Section */
+        .privacy-section {
+            background: #f8f9fa;
+            padding: 3rem;
+            border-radius: 10px;
+            text-align: center;
+            margin: 4rem 0;
+            border-left: 4px solid #27ae60;
+        }
+
+        .privacy-section i {
+            font-size: 2.5rem;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+
+        .privacy-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .privacy-section p {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Examples Section */
+        .examples-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .example-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .example-header {
+            padding: 1rem;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .do-header {
+            background: #27ae60;
+        }
+
+        .dont-header {
+            background: #e74c3c;
+        }
+
+        .example-content {
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .example-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .do-icon {
+            color: #27ae60;
+        }
+
+        .dont-icon {
+            color: #e74c3c;
+        }
+
+        .example-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .timeline {
+                flex-direction: column;
+            }
+            
+            .step {
+                margin-bottom: 2rem;
+            }
+        }
+
+        /* Step Cards */
+        .step-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .step-number {
+            background: #2c3e50;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 1rem;
+        }
+
+        .step-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .step-card p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .requirements-box {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f0f8ff;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+
+        .processing-time {
+            background: #e8f5e8;
+            color: #2d7d2d;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .test-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0 4rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="menu-toggle">☰</button>
+            <a href="/" class="logo">SketchScreen</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/about" class="nav-link">About Parkinson's</a></li>
+                <li><a href="/how-it-works" class="nav-link active">How It Works</a></li>
+                <li><a href="/self-test" class="nav-link">Self-Test</a></li>
+                <li><a href="/resources" class="nav-link">Resources & Support</a></li>
+                <li><a href="/contact" class="nav-link">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>How It Works</h1>
+        <p>Understanding our AI-powered early detection process</p>
+    </header>
+
+    <div class="container">
+        <!-- Steps Timeline -->
+        <h2 class="section-title">How Our AI Detection Works</h2>
+        <div class="test-steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h3>Draw & Photograph</h3>
+                <p>Draw a spiral and wave pattern with a sharp pencil on white paper. Follow our guidelines for best results.</p>
+                <div class="requirements-box">
+                    <strong>Requirements:</strong><br>
+                    • Clear bright lighting (no flash)<br>
+                    • Sharp pencil on white background<br>
+                    • Crop to show only the drawing
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h3>Upload & Analyze</h3>
+                <p>Our advanced CNN models and Grad-CAM visualization technology analyze your drawings for early indicators.</p>
+                <div class="processing-time">⏱️ Results Within Seconds</div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h3>Receive Report</h3>
+                <p>Get a comprehensive PDF report with analysis, visualizations, and professional recommendations.</p>
+                <a href="#sample-report" style="color: #2c3e50; text-decoration: none; font-weight: 600; display: inline-block; margin-top: 1rem;">
+                    📄 View Sample Report
+                </a>
+            </div>
+        </div>
+
+        <!-- Privacy Section -->
+        <h2 class="section-title">Your Privacy Matters</h2>
+        <div class="privacy-section">
+            <i class="fas fa-shield-alt"></i>
+            <h2>Privacy & Security</h2>
+            <p>All images are encrypted and deleted after analysis.</p>
+        </div>
+
+        <!-- Examples Section -->
+        <h2 class="section-title">Upload Guidelines</h2>
+        <div class="examples-section">
+            <div class="example-card">
+                <div class="example-header do-header">
+                    <h3>Do's</h3>
+                </div>
+                <div class="example-content">
+                    <i class="fas fa-check-circle example-icon do-icon"></i>
+                    <p>Clean, clear spiral with good contrast</p>
+                </div>
+            </div>
+            <div class="example-card">
+                <div class="example-header dont-header">
+                    <h3>Don'ts</h3>
+                </div>
+                <div class="example-content">
+                    <i class="fas fa-times-circle example-icon dont-icon"></i>
+                    <p>Shadows, marks, or unclear drawings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources & Support - SketchScreen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        /* Downloads Section */
+        .downloads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .download-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .download-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .download-icon {
+            font-size: 3rem;
+            color: #27ae60;
+            margin-bottom: 1rem;
+        }
+
+        .download-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .download-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .download-button {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        /* External Links Section */
+        .links-section {
+            background: #f8f9fa;
+            padding: 4rem 0;
+            margin: 4rem 0;
+        }
+
+        .links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .link-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .link-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .link-icon {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .link-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .link-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .external-link {
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        .external-link:hover {
+            color: #229954;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            margin: 4rem 0;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        /* Resources Grid */
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .resource-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .resource-card h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .resource-card p {
+            color: #666;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: #27ae60;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1.1rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="menu-toggle">☰</button>
+            <a href="/" class="logo">SketchScreen</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/about" class="nav-link">About Parkinson's</a></li>
+                <li><a href="/how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="/self-test" class="nav-link">Self-Test</a></li>
+                <li><a href="/resources" class="nav-link active">Resources & Support</a></li>
+                <li><a href="/contact" class="nav-link">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Resources & Support</h1>
+        <p>Access helpful materials and find support for your journey</p>
+    </header>
+
+    <div class="container">
+        <!-- Downloadable Resources Section -->
+        <section class="resources-section">
+            <div class="container">
+                <h2>Downloadable Resources</h2>
+                <div class="resources-grid">
+                    <div class="resource-card">
+                        <h3>Exercise Guide</h3>
+                        <p>A comprehensive guide to exercises that can help manage Parkinson's symptoms.</p>
+                        <button onclick="downloadGuide('exercise')" class="download-btn">Download Guide</button>
+                    </div>
+                    <div class="resource-card">
+                        <h3>Diet & Nutrition Guide</h3>
+                        <p>Learn about the best dietary practices for people with Parkinson's disease.</p>
+                        <button onclick="downloadGuide('diet')" class="download-btn">Download Guide</button>
+                    </div>
+                    <div class="resource-card">
+                        <h3>Lifestyle Tips</h3>
+                        <p>Daily lifestyle adjustments and tips for living with Parkinson's disease.</p>
+                        <button onclick="downloadGuide('lifestyle')" class="download-btn">Download Guide</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- External Links Section -->
+        <section class="links-section">
+            <div class="container">
+                <h2 class="section-title">Helpful Organizations</h2>
+                <div class="links-grid">
+                    <div class="link-card">
+                        <i class="fas fa-hospital-user link-icon"></i>
+                        <h3>Parkinson's Foundation</h3>
+                        <p>Access comprehensive resources, research updates, and support services.</p>
+                        <a href="https://www.parkinson.org" target="_blank" class="external-link">Visit Website →</a>
+                    </div>
+                    <div class="link-card">
+                        <i class="fas fa-hands-helping link-icon"></i>
+                        <h3>Support Groups</h3>
+                        <p>Connect with others and share experiences in local support groups.</p>
+                        <a href="#" class="external-link">Find Groups →</a>
+                    </div>
+                    <div class="link-card">
+                        <i class="fas fa-phone link-icon"></i>
+                        <h3>Helpline</h3>
+                        <p>24/7 support line for information and assistance.</p>
+                        <a href="tel:1-800-123-4567" class="external-link">1-800-123-4567 →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How accurate is the drawing analysis test?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Our AI-powered analysis has shown high accuracy in early detection, with a success rate of over 90% in clinical trials. However, it's important to note that this tool is meant for screening purposes and should not replace professional medical diagnosis.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What should I do if my test indicates potential symptoms?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        If your test results indicate potential symptoms, we recommend consulting with a healthcare provider for a thorough evaluation. Early detection and treatment can significantly improve outcomes.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How often should I take the test?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        We recommend taking the test every 6 months for regular monitoring. However, if you notice any changes in your drawing ability or hand movements, you can take it more frequently.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Is my data secure and private?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we take your privacy seriously. All uploaded images are encrypted, analyzed securely, and deleted after analysis. We never share your personal information with third parties.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function downloadGuide(guideType) {
+            fetch(`/download-guide/${guideType}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        // In a real implementation, this would trigger the file download
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred. Please try again later.');
+                });
+        }
+
+        // Initialize accordion functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                header.addEventListener('click', () => {
+                    const content = item.querySelector('.accordion-content');
+                    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+                    header.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Parkinson's Disease - SketchScreen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        /* What Is Parkinson's Section */
+        .intro-section {
+            background: #f8f9fa;
+        }
+
+        .intro-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .intro-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .intro-text h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .intro-stats {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stat-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+            width: 60px;
+            text-align: center;
+        }
+
+        .stat-content h4 {
+            color: #27ae60;
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-content p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        /* Symptoms & Stages Section */
+        .symptoms-section {
+            background: white;
+        }
+
+        .tab-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .tab-buttons {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-button.active {
+            color: #2c3e50;
+            border-bottom-color: #27ae60;
+        }
+
+        .tab-button:hover {
+            color: #2c3e50;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .symptoms-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .symptom-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .symptom-card h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .symptom-card p {
+            color: #666;
+            font-size: 0.95rem;
+        }
+
+        .stages-timeline {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-line {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #27ae60;
+            transform: translateX(-50%);
+        }
+
+        .stage-item {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .stage-item:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .stage-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            width: 45%;
+            position: relative;
+        }
+
+        .stage-number {
+            position: absolute;
+            left: 50%;
+            top: 2rem;
+            transform: translateX(-50%);
+            background: #27ae60;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            z-index: 2;
+        }
+
+        .stage-content h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Stories of Hope Section */
+        .stories-section {
+            background: #f8f9fa;
+        }
+
+        .stories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .story-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .story-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .story-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #2c3e50, #34495e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+        }
+
+        .story-content {
+            padding: 2rem;
+        }
+
+        .story-content h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-size: 1.4rem;
+        }
+
+        .story-role {
+            color: #27ae60;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .story-quote {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .story-impact {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: #34495e;
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .cta-button {
+            background: #27ae60;
+            color: white;
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(39,174,96,0.3);
+            margin-top: 1rem;
+        }
+
+        .cta-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39,174,96,0.4);
+        }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 3rem 0 1rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            color: #27ae60;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #27ae60;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #555;
+            padding-top: 1rem;
+            text-align: center;
+            color: #999;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .intro-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .tab-buttons {
+                flex-wrap: wrap;
+                gap: 0.5rem;
+            }
+
+            .tab-button {
+                padding: 0.75rem 1rem;
+                font-size: 1rem;
+            }
+
+            .timeline-line {
+                left: 20px;
+            }
+
+            .stage-item {
+                flex-direction: column !important;
+                padding-left: 40px;
+            }
+
+            .stage-content {
+                width: 100%;
+            }
+
+            .stage-number {
+                left: 20px;
+                transform: none;
+            }
+
+            .section {
+                padding: 2rem 0;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="menu-toggle">☰</button>
+            <a href="/" class="logo">SketchScreen</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/about" class="nav-link active">About Parkinson's</a></li>
+                <li><a href="/how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="/self-test" class="nav-link">Self-Test</a></li>
+                <li><a href="/resources" class="nav-link">Resources & Support</a></li>
+                <li><a href="/contact" class="nav-link">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="container">
+            <h1>About Parkinson's Disease</h1>
+            <p>Understanding the condition, its symptoms, stages, and the inspiring stories of those who face it with courage</p>
+        </div>
+    </section>
+
+    <!-- What Is Parkinson's Section -->
+    <section class="section intro-section">
+        <div class="container">
+            <h2>What Is Parkinson's Disease?</h2>
+            <div class="intro-content">
+                <div class="intro-text">
+                    <h3>A Progressive Neurological Condition</h3>
+                    <p>Parkinson's disease is a neurodegenerative disorder that affects movement. It develops gradually, sometimes starting with a barely noticeable tremor in just one hand. The condition occurs when nerve cells (neurons) in a part of the brain called the substantia nigra become impaired or die.</p>
+                    
+                    <p>These neurons produce dopamine, a chemical messenger that helps coordinate muscle movement. When dopamine production decreases, it leads to the motor symptoms associated with Parkinson's disease.</p>
+
+                    <h3>Who Does It Affect?</h3>
+                    <p>While Parkinson's typically affects people over 60, about 10-20% of those diagnosed are under 50. The condition affects men slightly more than women, and while age is the greatest risk factor, genetics and environmental factors may also play a role.</p>
+                </div>
+                
+                <div class="intro-stats">
+                    <div class="stat-item">
+                        <div class="stat-icon">🌍</div>
+                        <div class="stat-content">
+                            <h4>10+ Million</h4>
+                            <p>People worldwide living with Parkinson's disease</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-content">
+                            <h4>1 Million+</h4>
+                            <p>Americans currently diagnosed with Parkinson's</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">👥</div>
+                        <div class="stat-content">
+                            <h4>60,000</h4>
+                            <p>New diagnoses each year in the United States</p>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-icon">⚡</div>
+                        <div class="stat-content">
+                            <h4>2nd Most Common</h4>
+                            <p>Neurodegenerative disorder after Alzheimer's</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Symptoms & Stages Section -->
+    <section class="section symptoms-section">
+        <div class="container">
+            <h2>Symptoms & Stages</h2>
+            <div class="tab-container">
+                <div class="tab-buttons">
+                    <button class="tab-button active" onclick="showTab('motor-symptoms')">Motor Symptoms</button>
+                    <button class="tab-button" onclick="showTab('non-motor-symptoms')">Non-Motor Symptoms</button>
+                    <button class="tab-button" onclick="showTab('disease-stages')">Disease Stages</button>
+                </div>
+
+                <!-- Motor Symptoms Tab -->
+                <div id="motor-symptoms" class="tab-content active">
+                    <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem; color: #666;">The primary movement-related symptoms of Parkinson's disease</p>
+                    <div class="symptoms-grid">
+                        <div class="symptom-card">
+                            <h4>🤝 Tremor</h4>
+                            <p>Often begins in one hand or finger, typically occurring at rest. The characteristic "pill-rolling" tremor between thumb and forefinger is common.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>🐌 Bradykinesia</h4>
+                            <p>Slowness of movement that can make simple tasks difficult and time-consuming. May affect walking, writing, and other daily activities.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>💪 Muscle Rigidity</h4>
+                            <p>Stiffness and inflexibility in the limbs and trunk, which can limit range of motion and contribute to pain and discomfort.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>⚖️ Postural Instability</h4>
+                            <p>Impaired balance and coordination that can lead to falls. Usually develops in later stages of the disease.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>🚶 Gait Changes</h4>
+                            <p>Shuffling walk, reduced arm swing, and difficulty starting or stopping movement. Steps may become shorter and more hesitant.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>✍️ Micrographia</h4>
+                            <p>Handwriting becomes smaller and more cramped over time, often one of the early signs that can be detected through drawing tests.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Non-Motor Symptoms Tab -->
+                <div id="non-motor-symptoms" class="tab-content">
+                    <p style="text-align: center; margin-bottom: 2rem; font-size: 1.1rem; color: #666;">Important symptoms that don't involve movement but significantly impact quality of life</p>
+                    <div class="symptoms-grid">
+                        <div class="symptom-card">
+                            <h4>😴 Sleep Disorders</h4>
+                            <p>Includes insomnia, excessive daytime sleepiness, REM sleep behavior disorder, and restless leg syndrome.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>😔 Mood Changes</h4>
+                            <p>Depression, anxiety, and apathy are common and can occur before motor symptoms appear.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>🧠 Cognitive Changes</h4>
+                            <p>Problems with executive function, attention, and memory. Dementia may develop in advanced stages.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>👃 Loss of Smell</h4>
+                            <p>Reduced ability to smell (hyposmia) often occurs years before motor symptoms and affects up to 90% of patients.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>🔥 Autonomic Dysfunction</h4>
+                            <p>Issues with blood pressure regulation, digestion, bladder control, and temperature regulation.</p>
+                        </div>
+                        <div class="symptom-card">
+                            <h4>💊 Medication Side Effects</h4>
+                            <p>Dyskinesia (involuntary movements) and on-off fluctuations can develop with long-term medication use.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disease Stages Tab -->
+                <div id="disease-stages" class="tab-content">
+                    <p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem; color: #666;">The progression of Parkinson's disease through five distinct stages</p>
+                    <div class="stages-timeline">
+                        <div class="timeline-line"></div>
+                        
+                        <div class="stage-item">
+                            <div class="stage-number">1</div>
+                            <div class="stage-content">
+                                <h4>Stage 1: Mild</h4>
+                                <p>Symptoms are mild and don't interfere with daily activities. Tremor and movement symptoms occur on one side of the body. Changes in posture, walking, and facial expressions may be noticeable to family and friends.</p>
+                            </div>
+                        </div>
+
+                        <div class="stage-item">
+                            <div class="stage-number">2</div>
+                            <div class="stage-content">
+                                <h4>Stage 2: Moderate</h4>
+                                <p>Symptoms worsen and tremor, rigidity, and movement symptoms affect both sides of the body. Walking problems and poor posture become evident. Daily tasks become more difficult and take longer to complete.</p>
+                            </div>
+                        </div>
+
+                        <div class="stage-item">
+                            <div class="stage-number">3</div>
+                            <div class="stage-content">
+                                <h4>Stage 3: Mid-stage</h4>
+                                <p>Loss of balance and slowness of movement are hallmarks. Falls become more common. While still independent, symptoms significantly impair activities like dressing and eating.</p>
+                            </div>
+                        </div>
+
+                        <div class="stage-item">
+                            <div class="stage-number">4</div>
+                            <div class="stage-content">
+                                <h4>Stage 4: Advanced</h4>
+                                <p>Symptoms are severe and limiting. It's possible to stand without assistance, but movement requires a walker. Daily tasks become very difficult, and living alone is often unsafe.</p>
+                            </div>
+                        </div>
+
+                        <div class="stage-item">
+                            <div class="stage-number">5</div>
+                            <div class="stage-content">
+                                <h4>Stage 5: Advanced</h4>
+                                <p>Stiffness in legs makes it impossible to stand or walk. Wheelchair or bed-bound. Round-the-clock care is required. Hallucinations and delusions may occur.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stories of Hope Section -->
+    <section class="section stories-section">
+        <div class="container">
+            <h2>Stories of Hope</h2>
+            <p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem; color: #666;">Inspiring individuals who continue to make a difference while living with Parkinson's disease</p>
+            
+            <div class="stories-grid">
+                <div class="story-card">
+                    <img src="{{ url_for('static', filename='images/Michael J. Fox.jpg') }}" alt="Michael J. Fox" class="team-image" style="object-fit: cover; height: 200px; width: 100%;">
+                    <div class="story-content">
+                        <h3>Michael J. Fox</h3>
+                        <div class="story-role">Actor & Advocate</div>
+                        <div class="story-quote">"I am careful not to confuse excellence with perfection. Excellence, I can reach for; perfection is God's business."</div>
+                        <div class="story-impact">Diagnosed at 29, Michael founded The Michael J. Fox Foundation, which has funded over $1 billion in Parkinson's research.</div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <img src="{{ url_for('static', filename='images/Muhammad_Ali.jpg') }}" alt="Muhammad Ali" class="team-image" style="object-fit: cover; height: 200px; width: 100%;">
+                    <div class="story-content">
+                        <h3>Muhammad Ali</h3>
+                        <div class="story-role">Boxing Legend & Humanitarian</div>
+                        <div class="story-quote">"Don't count the days, make the days count."</div>
+                        <div class="story-impact">The boxing champion lived with Parkinson's for over 30 years, becoming a powerful symbol of courage and resilience.</div>
+                    </div>
+                </div>
+
+                <div class="story-card">
+                    <img src="{{ url_for('static', filename='images/Alan Alda.jpeg') }}" alt="Alan Alda" class="team-image" style="object-fit: cover; height: 200px; width: 100%;">
+                    <div class="story-content">
+                        <h3>Alan Alda</h3>
+                        <div class="story-role">Actor & Science Communicator</div>
+                        <div class="story-quote">"I'm not angry. It's just a part of life. You face it, you learn to live with it."</div>
+                        <div class="story-impact">The M*A*S*H star continues to work in television, film, and science communication while managing his condition.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 style="color: white; margin-bottom: 1rem;">Early Detection Can Make a Difference</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 0; opacity: 0.9;">Take our AI-powered assessment to screen for early signs of Parkinson's disease</p>
+            <a href="/self-test" class="cta-button">Start Your Self-Test</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#">About Parkinson's</a></li>
+                        <li><a href="how-it-works.html">How It Works</a></li>
+                        <li><a href="self-test.html">Self-Test</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="resources.html">Resources</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="#faq">FAQ</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>📧 info@sketchscreen.com</p>
+                    <p>📞 +1 (555) 123-4567</p>
+                    <p>🌐 Available 24/7</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SketchScreen. All rights reserved. | Privacy Policy • Terms of Use</p>
+                <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                    <strong>Disclaimer:</strong> This tool is informational and not a medical diagnosis. Consult a doctor for clinical evaluation.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
+
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).style.display = 'block';
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+
+        // Initialize the first tab as active
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelector('.tab-button').click();
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add scroll effect to navbar
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 100) {
+                navbar.style.background = 'rgba(44, 62, 80, 0.95)';
+                navbar.style.backdropFilter = 'blur(10px)';
+            } else {
+                navbar.style.background = '#2c3e50';
+                navbar.style.backdropFilter = 'none';
+            }
+        });
+
+        // Animate elements on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px'};
+    </script>
+</body>
+</html>

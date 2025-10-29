@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self Test - Parkinson's Detection</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #ffffff;
+        }
+
+        /* Page Header */
+        .page-header {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .page-header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        /* Instructions Panel */
+        .instructions-panel {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .instructions-panel h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .criteria-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .criteria-list li {
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .criteria-list li:before {
+            content: '✓';
+            color: #27ae60;
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        .guide-link {
+            display: inline-block;
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            background: white;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 2px solid #2c3e50;
+        }
+
+        .guide-link:hover {
+            background: #2c3e50;
+            color: white;
+        }
+
+        /* Upload Form */
+        .upload-form {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .file-input-container {
+            position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-input:hover {
+            border-color: #27ae60;
+        }
+
+        .preview-container {
+            width: 150px;
+            height: 150px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+        }
+
+        .preview-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .email-input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .email-input:focus {
+            border-color: #27ae60;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(39,174,96,0.1);
+        }
+
+        .submit-button {
+            background: #27ae60;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .submit-button:enabled {
+            opacity: 1;
+        }
+
+        .submit-button:enabled:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        /* Progress Indicator */
+        .progress-container {
+            display: none;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0,0,0,0.1);
+            border-left-color: #27ae60;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .upload-section {
+                grid-template-columns: 1fr;
+            }
+
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+
+            .page-header p {
+                font-size: 1.1rem;
+            }
+        }
+
+        .upload-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .file-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .preview-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .preview-image {
+            max-width: 200px;
+            max-height: 200px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .error-message {
+            color: #f44336;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .instructions {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <button class="menu-toggle">☰</button>
+            <a href="/" class="logo">SketchScreen</a>
+            <ul class="nav-menu">
+                <li><a href="/" class="nav-link">Home</a></li>
+                <li><a href="/about" class="nav-link">About Parkinson's</a></li>
+                <li><a href="/how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="/self-test" class="nav-link active">Self-Test</a></li>
+                <li><a href="/resources" class="nav-link">Resources & Support</a></li>
+                <li><a href="/contact" class="nav-link">Contact Us</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <h1>Self Test</h1>
+        <p>Upload your spiral and wave drawings for analysis</p>
+    </header>
+
+    <div class="upload-container">
+        <div class="instructions">
+            <h3>Instructions:</h3>
+            <ol>
+                <li>Draw a spiral pattern on a white paper</li>
+                <li>Draw a wave pattern on a white paper</li>
+                <li>Take clear photos of both drawings</li>
+                <li>Upload both images below</li>
+            </ol>
+        </div>
+
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="spiral">Spiral Drawing:</label>
+                <input type="file" id="spiral" name="spiral" class="file-input" accept="image/*" required>
+                <div id="spiralPreview" class="preview-container">
+                    <img class="preview-image" alt="Spiral preview">
+                </div>
+                <div class="error-message" id="spiralError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="wave">Wave Drawing:</label>
+                <input type="file" id="wave" name="wave" class="file-input" accept="image/*" required>
+                <div id="wavePreview" class="preview-container">
+                    <img class="preview-image" alt="Wave preview">
+                </div>
+                <div class="error-message" id="waveError"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" class="file-input" required>
+            </div>
+            <div class="form-group">
+                <label for="age">Age (18-60):</label>
+                <input type="number" id="age" name="age" class="file-input" min="18" max="60" required>
+            </div>
+            <div class="form-group">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" class="file-input" required>
+                    <option value="">Select Gender</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn">Analyze Drawings</button>
+        </form>
+
+        <div class="loading">
+            Analyzing your drawings... Please wait...
+        </div>
+    </div>
+
+    <!-- Cropping Guide Modal -->
+    <div class="modal" id="croppingModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="hideCroppingGuide()">&times;</span>
+            <h2>Image Cropping Guide</h2>
+            <div style="margin: 2rem 0;">
+                <h3>Steps for Perfect Image Capture:</h3>
+                <ol style="margin-left: 1.5rem; margin-top: 1rem;">
+                    <li>Place your drawing on a flat surface with good lighting</li>
+                    <li>Hold your camera directly above the drawing</li>
+                    <li>Ensure the entire drawing is visible and centered</li>
+                    <li>Crop the image to remove excess background</li>
+                    <li>Check that the lines are clear and visible</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function previewImage(input, previewId) {
+            const preview = document.querySelector(`#${previewId} img`);
+            const container = document.querySelector(`#${previewId}`);
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    container.style.display = 'block';
+                }
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        document.getElementById('spiral').addEventListener('change', function() {
+            previewImage(this, 'spiralPreview');
+        });
+
+        document.getElementById('wave').addEventListener('change', function() {
+            previewImage(this, 'wavePreview');
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validate age
+            const age = parseInt(document.getElementById('age').value, 10);
+            if (isNaN(age) || age < 18 || age > 60) {
+                alert('Age must be between 18 and 60.');
+                return;
+            }
+            // Validate gender
+            const gender = document.getElementById('gender').value;
+            if (!gender) {
+                alert('Please select your gender.');
+                return;
+            }
+            // Collect user info
+            const name = document.getElementById('name').value;
+            const userInfo = JSON.stringify({ name, age, gender });
+            const form = new FormData(this);
+            form.set('user_info', userInfo);
+            
+            const loading = document.querySelector('.loading');
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            // Show loading, disable submit
+            loading.style.display = 'block';
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Analyzing...';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: form
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    // Redirect to the report
+                    window.location.href = result.report_url;
+                } else {
+                    alert('Error: ' + result.message);
+                }
+            } catch (error) {
+                alert('Error uploading files: ' + error.message);
+            } finally {
+                // Hide loading, enable submit
+                loading.style.display = 'none';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Analyze Drawings';
+            }
+        });
+
+        // Modal functionality
+        function showCroppingGuide() {
+            document.getElementById('croppingModal').style.display = 'flex';
+        }
+
+        function hideCroppingGuide() {
+            document.getElementById('croppingModal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('croppingModal');
+            if (event.target == modal) {
+                hideCroppingGuide();
+            }
+        }
+    </script>
+</body>
+</html> 
