@@ -45,7 +45,3 @@ sketchscreen/
 3. Fill in the required information
 4. Submit for analysis
 5. View and download your detailed report
-
-## Contact
-
-[Add your contact information here] 
