@@ -26,6 +26,17 @@ python app.py
 ```
 3. Open your web browser and navigate to `http://localhost:5003`
 
+## 🧠 Model Weights
+
+The trained deep learning models for spiral and wave analysis are too large to be stored directly on GitHub.  
+Please download them using the links below and place them in the `models/` directory before running the application.
+
+### 📥 Download Links
+
+- **Spiral Model:** [Download spiral_model weights](https://drive.google.com/file/d/1Q920jUU-ljhTGB631VixhhcSGMthtRRt/view?usp=drive_link)
+- **Wave Model:** [Download wave_model weights](https://drive.google.com/file/d/1VTuTNjlXXyaJTYscCbIqYLKwNN62qa5p/view?usp=drive_link)
+
+
 ## Project Structure
 
 ```
@@ -37,8 +48,6 @@ sketchscreen/
 ├── templates/         # HTML templates
 └── utils/            # Utility functions and classes
 ```
-
-## Usage
 
 1. Navigate to the self-test page
 2. Upload your spiral and wave drawings
